@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Orders - FreshMart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #28a745;
+      --secondary-color: #f8f9fa;
+    }
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .orders-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .orders-card {
+      border-radius: 10px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .orders-card-header {
+      background-color: var(--secondary-color);
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+    }
+    .order-item {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .product-image {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 5px;
+      border: 1px solid #eee;
+      padding: 5px;
+      background: white;
+    }
+    .status-badge {
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 700;
+      border-radius: 0.25rem;
+    }
+    .status-processing {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .status-shipped {
+      background-color: #cce5ff;
+      color: #004085;
+    }
+    .status-delivered {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .status-cancelled {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #6c757d;
+    }
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #dee2e6;
+    }
+    .order-date {
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+    .order-total {
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .order-item-details {
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Orders Header -->
+  <div class="orders-header">
+    <div class="container">
+      <h1><i class="fas fa-clipboard-list me-2"></i> My Orders</h1>
+    </div>
+  </div>
+
+  <div class="container mb-5">
+    <div id="ordersContainer">
+      <!-- Orders will be loaded here -->
+      <div class="empty-state">
+        <i class="fas fa-box-open"></i>
+        <h3>No orders found</h3>
+        <p>You haven't placed any orders yet.</p>
+        <a href="index.html" class="btn btn-primary mt-3">Start Shopping</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <a href="index.html" class="btn btn-outline-light mb-3">
+        <i class="fas fa-home me-2"></i> Return to Home Page
+      </a>
+      <p class="mb-0">© 2023 FreshMart. All rights reserved.</p>
+      <p class="mb-0">Designed and Developed by Anto kochumon.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Initialize Firebase
+      const firebaseConfig = {
+  apiKey: "AIzaSyDU6li87RVbo5uHsQkM5cVpiT16Cjp4GwY",
+  authDomain: "anto-343cf.firebaseapp.com",
+  projectId: "anto-343cf",
+  storageBucket: "anto-343cf.firebasestorage.app",
+  messagingSenderId: "101895361272",
+  appId: "1:101895361272:web:5599e4de733055b92e610d",
+  measurementId: "G-YR2J7DEXRD"
+};
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const auth = firebase.auth();
+
+      // Check if user is logged in
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          // Redirect to login if not authenticated
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          // Get orders for the current user (assuming email is used as identifier)
+// Remove the ordering temporarily while testing
+const querySnapshot = await db.collection("orders")
+  .where("email", "==", user.email)
+  // .orderBy("orderDate", "desc") // Remove this line temporarily
+  .get();
+
+          const ordersContainer = document.getElementById("ordersContainer");
+          
+          if (querySnapshot.empty) {
+            // Show empty state (already in HTML)
+            return;
+          }
+
+          // Clear empty state
+          ordersContainer.innerHTML = "";
+
+          // Process each order
+          querySnapshot.forEach((doc) => {
+            const orderData = doc.data();
+            const orderId = doc.id;
+            const orderDate = new Date(orderData.orderDate);
+            const formattedDate = orderDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+
+            // Create order card
+            const orderCard = document.createElement("div");
+            orderCard.className = "orders-card";
+            
+            // Order header with ID and date
+            let orderHeader = `
+              <div class="orders-card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="me-3">Order #${orderId.substring(0, 8)}</span>
+                  <span class="order-date">${formattedDate}</span>
+                </div>
+                <span class="status-badge ${getStatusClass(orderData.status)}">${orderData.status}</span>
+              </div>
+              <div class="card-body p-0">
+            `;
+
+            // Add each item in the order
+            orderData.items.forEach((item, index) => {
+              const itemTotal = item.price * item.quantity;
+              orderHeader += `
+                <div class="order-item">
+                  <div class="row">
+                    <div class="col-md-6 d-flex">
+                      <img src="${item.imageUrl || 'https://via.placeholder.com/60'}" 
+                           class="product-image me-3" 
+                           alt="${item.name}">
+                      <div>
+                        <h6 class="mb-1">${item.name}</h6>
+                        <small class="text-muted">$${item.price.toFixed(2)} × ${item.quantity}</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6 order-item-details">
+                      <div class="d-flex justify-content-between">
+                        <span>Item Total:</span>
+                        <strong>$${itemTotal.toFixed(2)}</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+
+            // Add order summary
+            orderHeader += `
+                <div class="order-item bg-light">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="d-flex justify-content-between">
+                        <span>Subtotal:</span>
+                        <span>$${orderData.subtotal.toFixed(2)}</span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <span>Tax:</span>
+                        <span>$${orderData.tax.toFixed(2)}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex justify-content-between">
+                        <span class="order-total">Total:</span>
+                        <span class="order-total">$${orderData.total.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+ 
+            `;
+
+            orderCard.innerHTML = orderHeader;
+            ordersContainer.appendChild(orderCard);
+          });
+
+        } catch (error) {
+          console.error("Error loading orders:", error);
+          ordersContainer.innerHTML = `
+            <div class="alert alert-danger">
+              There was an error loading your orders. Please try again later.
+            </div>
+          `;
+        }
+      });
+
+      // Helper function to get status badge class
+      function getStatusClass(status) {
+        switch(status.toLowerCase()) {
+          case 'processing':
+            return 'status-processing';
+          case 'shipped':
+            return 'status-shipped';
+          case 'delivered':
+            return 'status-delivered';
+          case 'cancelled':
+            return 'status-cancelled';
+          default:
+            return 'status-processing';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar Styles */
+.navbar-brand {
+    font-weight: 700;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+    color: white;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #f1f8e9;
+    padding: 4rem 0;
+}
+
+/* Category Cards */
+.category-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-card img {
+    transition: transform 0.5s ease;
+}
+
+.category-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Product Cards */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-card .badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Why Choose Us */
+.icon-box {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Footer */
+footer {
+    background-color: #2c3e50;
+}
+
+.social-icons a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.social-icons a:hover {
+    background-color: #28a745;
+    text-decoration: none;
+}
+
+/* Login/Signup Forms */
+.card {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Product Page */
+.product-images .thumb {
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.product-images .thumb:hover {
+    border-color: #28a745;
+}
+
+.ratings i {
+    color: #ffc107;
+}
+
+/* Quantity Input */
+.input-group {
+    width: 120px;
+}
+
+/* Timeline for Order Tracking */
+.timeline {
+    position: relative;
+    padding-left: 50px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.timeline-step {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: -50px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-content {
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+/* Admin Dashboard */
+.sidebar {
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 20px 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.sidebar .nav-link.active {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: static;
+        height: auto;
+        padding: 0;
+    }
+    
+    .hero-section .col-md-6:last-child {
+        margin-top: 30px;
+    }
+}
+
+/* Utility Classes */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Success Theme Colors */
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+/* Order Success Page */
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product - FreshMart</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-shopping-basket me-2"></i>FreshMart
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Departments
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Fruits & Vegetables</a></li>
+                            <li><a class="dropdown-item" href="#">Meat & Fish</a></li>
+                            <li><a class="dropdown-item" href="#">Dairy & Eggs</a></li>
+                            <li><a class="dropdown-item" href="#">Bakery</a></li>
+                            <li><a class="dropdown-item" href="#">Frozen</a></li>
+                            <li><a class="dropdown-item" href="#">Drinks</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Offers</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="input-group me-3">
+                        <input type="text" class="form-control" placeholder="Search products...">
+                        <button class="btn btn-light" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                        <a href="cart.html" class="btn btn-warning position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Section -->
+    <section class="product-section py-5">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Fruits & Vegetables</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" id="productCategory">Product</li>
+                </ol>
+            </nav>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="product-images">
+                        <div class="main-image mb-3">
+                            <img id="mainProductImage" src="images/product-placeholder.jpg" class="img-fluid rounded border" alt="Product">
+                        </div>
+                        <div class="thumbnail-images d-flex">
+                            <div class="thumb me-2 border rounded p-1 cursor-pointer">
+                                <img src="images/product-placeholder.jpg" class="img-fluid" alt="Thumbnail 1">
+                            </div>
+                            <div class="thumb me-2 border rounded p-1 cursor-pointer">
+                                <img src="images/product-placeholder.jpg" class="img-fluid" alt="Thumbnail 2">
+                            </div>
+                            <div class="thumb me-2 border rounded p-1 cursor-pointer">
+                                <img src="images/product-placeholder.jpg" class="img-fluid" alt="Thumbnail 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product-details">
+                        <h1 id="productName">Product Name</h1>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="ratings me-2">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                            </div>
+                            <span class="text-muted">(24 reviews)</span>
+                        </div>
+                        <div class="price mb-3">
+                            <span class="h4 text-success" id="productPrice">£2.50</span>
+                            <span class="text-muted text-decoration-line-through ms-2" id="originalPrice">£3.00</span>
+                            <span class="badge bg-danger ms-2" id="discountPercentage">17% OFF</span>
+                        </div>
+                        <div class="availability mb-3">
+                            <span class="text-success"><i class="fas fa-check-circle me-1"></i> In Stock</span>
+                        </div>
+                        <div class="description mb-4">
+                            <p id="productDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        </div>
+                        <div class="variants mb-4">
+                            <h6 class="mb-2">Size/Weight:</h6>
+                            <div class="btn-group" role="group">
+                                <input type="radio" class="btn-check" name="variant" id="variant1" autocomplete="off" checked>
+                                <label class="btn btn-outline-success" for="variant1">500g</label>
+                                
+                                <input type="radio" class="btn-check" name="variant" id="variant2" autocomplete="off">
+                                <label class="btn btn-outline-success" for="variant2">1kg</label>
+                                
+                                <input type="radio" class="btn-check" name="variant" id="variant3" autocomplete="off">
+                                <label class="btn btn-outline-success" for="variant3">2kg</label>
+                            </div>
+                        </div>
+                        <div class="quantity mb-4">
+                            <h6 class="mb-2">Quantity:</h6>
+                            <div class="input-group" style="width: 150px;">
+                                <button class="btn btn-outline-success" type="button" id="decrement">-</button>
+                                <input type="text" class="form-control text-center" value="1" id="quantity">
+                                <button class="btn btn-outline-success" type="button" id="increment">+</button>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-success me-3" id="addToCartBtn">
+                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            </button>
+                            <button class="btn btn-outline-success">
+                                <i class="fas fa-heart me-2"></i>Wishlist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product Tabs -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="specifications-tab" data-bs-toggle="tab" data-bs-target="#specifications" type="button" role="tab">Specifications</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">Reviews</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-3 border border-top-0 rounded-bottom" id="productTabsContent">
+                        <div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <h5>Product Description</h5>
+                            <p id="fullDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        </div>
+                        <div class="tab-pane fade" id="specifications" role="tabpanel">
+                            <h5>Product Specifications</h5>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Brand</th>
+                                        <td id="productBrand">FreshMart</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Country of Origin</th>
+                                        <td id="productOrigin">United Kingdom</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Storage Instructions</th>
+                                        <td id="productStorage">Store in a cool, dry place</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Shelf Life</th>
+                                        <td id="productShelfLife">7 days</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <h5>Customer Reviews</h5>
+                            <div class="review">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>John D.</strong>
+                                        <div class="ratings">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">2 days ago</small>
+                                </div>
+                                <p class="mt-2">Excellent quality, will buy again!</p>
+                            </div>
+                            <hr>
+                            <div class="review">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>Sarah M.</strong>
+                                        <div class="ratings">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">1 week ago</small>
+                                </div>
+                                <p class="mt-2">Very fresh and tasty. Good value for money.</p>
+                            </div>
+                            <hr>
+                            <div class="review-form mt-4">
+                                <h6>Write a Review</h6>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="reviewRating" class="form-label">Rating</label>
+                                        <select class="form-select" id="reviewRating">
+                                            <option value="5">5 Stars</option>
+                                            <option value="4">4 Stars</option>
+                                            <option value="3">3 Stars</option>
+                                            <option value="2">2 Stars</option>
+                                            <option value="1">1 Star</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reviewText" class="form-label">Review</label>
+                                        <textarea class="form-control" id="reviewText" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Submit Review</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Related Products -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h4 class="mb-4">You May Also Like</h4>
+                    <div class="row g-4" id="relatedProducts">
+                        <!-- Related products will be loaded here via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <h5 class="mb-4">FreshMart</h5>
+                    <p>Your one-stop shop for fresh groceries delivered to your door.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Shop</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Offers</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Recipes</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Customer Service</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">My Account</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Order Tracking</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">FAQs</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Returns Policy</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Grocery St, London</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +44 123 456 7890</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@freshmart.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 FreshMart. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <img src="images/payment-methods.png" alt="Payment methods" class="img-fluid" style="max-height: 30px;">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase -->
+    <script type="module" src="js/product.js"></script>
+</body>
+</html>

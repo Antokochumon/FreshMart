@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Online Grocery Shopping</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Product Cards */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .product-card .card-img-top {
+            transition: transform 0.3s ease;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .add-to-cart {
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            padding: 5px 15px;
+        }
+
+        .add-to-cart:hover {
+            background-color: #198754;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+        }
+
+        /* Why Choose Us Icons */
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* Navbar */
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Added space between navbar buttons */
+        .navbar-nav .nav-item {
+            margin-right: 10px;
+        }
+        
+        .navbar-nav .nav-item:last-child {
+            margin-right: 0;
+        }
+
+        /* Footer */
+        footer a {
+            text-decoration: none;
+            color: #adb5bd;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+                text-align: center;
+            }
+            
+            .hero-section .display-4 {
+                font-size: 2.2rem;
+            }
+            
+            .product-card .card-img-top {
+                height: 150px;
+            }
+            
+            .navbar-nav {
+                margin-top: 15px;
+            }
+            
+            .search-container {
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .product-card {
+                margin-bottom: 20px;
+            }
+            
+            /* Adjust spacing for mobile */
+            .navbar-nav .nav-item {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+            
+            .hero-section .display-4 {
+                font-size: 1.8rem;
+            }
+            
+            .category-card img {
+                height: 120px;
+            }
+            
+            .btn-lg {
+                padding: 8px 16px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Modern product card styling */
+        .product-card {
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+        }
+        
+        .product-card .card-body {
+            padding: 15px;
+        }
+        
+        .product-card .card-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .product-card .card-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+           
+            -webkit-box-orient: vertical;
+        }
+        
+        .product-card .price {
+            font-weight: 600;
+            color: #198754;
+        }
+        
+        .sale-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* Orders button for logged in users */
+        .orders-btn {
+            margin-right: 10px;
+        }
+    </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-shopping-basket me-2"></i>FreshMart
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Departments
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Fruits & Vegetables</a></li>
+                            <li><a class="dropdown-item" href="#">Meat & Fish</a></li>
+                            <li><a class="dropdown-item" href="#">Dairy & Eggs</a></li>
+                            <li><a class="dropdown-item" href="#">Bakery</a></li>
+                            <li><a class="dropdown-item" href="#">Frozen</a></li>
+                            <li><a class="dropdown-item" href="#">Drinks</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Recipes</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="input-group me-3 search-container">
+                        <input type="text" class="form-control" placeholder="Search products..." id="searchInput">
+                        <button class="btn btn-light" type="button" id="searchButton">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <!-- Dynamic Login/Logout Buttons -->
+                        <div id="authButtons">
+                            <a href="login.html" class="btn btn-outline-light me-2" id="loginBtn">Login</a>
+                            <button class="btn btn-outline-light me-2" id="logoutBtn" style="display:none;">Logout</button>
+                        
+                        </div>
+
+                      
+                        <!-- Dynamic Account and Cart -->
+                         <div>
+                        <a href="cart.html" id="cartbtn" class="btn btn-outline-light position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                              0
+                            </span>
+                          </a>
+                          </div>
+                        <div style="margin-left: 10px;">
+                          <a href="orders.html" class="btn btn-outline-light orders-btn me-2" id="ordersBtn" style="display:none; ">
+                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                        </a>
+                        </div>
+
+                          <div>
+                        <span id="accountBtn" style="display:none;" class="btn btn-outline-light me-2">Hello, <span id="username"></span></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold mb-4">Fresh Groceries Delivered to Your Door</h1>
+                    <p class="lead mb-4">Shop the freshest produce, meats, and pantry staples with convenient home delivery.</p>
+                    <a href="#featured-products" class="btn btn-success btn-lg">Shop Now</a>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Fresh groceries" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Shop by Category</h2>
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1444459094717-a39f1e3e0903?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Fruits & Vegetables">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Fruits & Vegetables</h5>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Meat & Fish">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Meat & Fish</h5>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Dairy & Eggs">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Dairy & Eggs</h5>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Bakery">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Bakery</h5>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="featured-products" class="featured-products py-5 bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Featured Products</h2>
+                <a href="#" class="btn btn-outline-success">View All</a>
+            </div>
+            <div class="row g-4" id="featuredProductsContainer">
+                <!-- Products will be loaded here via JavaScript -->
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading products...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weekly Offers -->
+    <section class="weekly-offers py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Weekly Offers</h2>
+                <a href="#" class="btn btn-outline-success">View All</a>
+            </div>
+            <div class="row g-4" id="offersContainer">
+                <!-- Offers will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Choose FreshMart?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 bg-transparent text-center">
+                        <div class="card-body">
+                            <div class="icon-box bg-success text-white rounded-circle mx-auto mb-3">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <h5 class="card-title">Fast Delivery</h5>
+                            <p class="card-text">Get your groceries delivered to your doorstep in as little as 1 hour.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-transparent text-center">
+                        <div class="card-body">
+                            <div class="icon-box bg-success text-white rounded-circle mx-auto mb-3">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h5 class="card-title">Fresh Quality</h5>
+                            <p class="card-text">We source only the freshest and highest quality products for you.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-transparent text-center">
+                        <div class="card-body">
+                            <div class="icon-box bg-success text-white rounded-circle mx-auto mb-3">
+                                <i class="fas fa-pound-sign"></i>
+                            </div>
+                            <h5 class="card-title">Best Prices</h5>
+                            <p class="card-text">Competitive prices with weekly offers and discounts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <h5 class="mb-4">FreshMart</h5>
+                    <p>Your one-stop shop for fresh groceries delivered to your door.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Shop</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Offers</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Recipes</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Customer Service</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">My Account</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Order Tracking</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">FAQs</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Returns Policy</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Grocery St, London</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +44 123 456 7890</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@freshmart.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 FreshMart. All rights reserved.</p>
+                    <p class="mb-0">Designed and Developed by Anto kochumon.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <img src="https://via.placeholder.com/300x30?text=Payment+Methods" alt="Payment methods" class="img-fluid" style="max-height: 30px;">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase and App Script -->
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDU6li87RVbo5uHsQkM5cVpiT16Cjp4GwY",
+            authDomain: "anto-343cf.firebaseapp.com",
+            projectId: "anto-343cf",
+            storageBucket: "anto-343cf.firebasestorage.app",
+            messagingSenderId: "101895361272",
+            appId: "1:101895361272:web:5599e4de733055b92e610d",
+            measurementId: "G-YR2J7DEXRD"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Function to load products from Firestore
+        function loadProducts() {
+            const featuredContainer = document.getElementById('featuredProductsContainer');
+            const offersContainer = document.getElementById('offersContainer');
+            
+            // Show loading state
+            featuredContainer.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading products...</p>
+                </div>
+            `;
+            offersContainer.innerHTML = '';
+            
+            // Get products from Firestore
+            db.collection("products").orderBy("createdAt", "desc").get()
+                .then((querySnapshot) => {
+                    featuredContainer.innerHTML = '';
+                    offersContainer.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        featuredContainer.innerHTML = `
+                            <div class="col-12 text-center py-5">
+                                <h4 class="text-muted">No products found</h4>
+                                <p>Check back later for our latest offerings</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    querySnapshot.forEach((doc, index) => {
+                        const product = doc.data();
+                        
+                        // Create product card HTML
+                        const productCard = `
+                            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                <div class="card product-card h-100">
+                                    ${index < 2 ? '<span class="sale-badge">SALE</span>' : ''}
+                                    <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${product.name}</h5>
+                                        <p class="card-text">${product.description.substring(0, 60)}...</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="price">$${product.price.toFixed(2)}</span>
+                                            <button class="btn btn-sm btn-outline-success add-to-cart" data-id="${doc.id}">
+                                                <i class="fas fa-cart-plus me-1"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Add to featured products (first 4) or offers (next 4)
+                        if (featuredContainer.children.length < 4) {
+                            featuredContainer.innerHTML += productCard;
+                        } else if (offersContainer.children.length < 4) {
+                            offersContainer.innerHTML += productCard;
+                        }
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error getting products: ", error);
+                    featuredContainer.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <h4 class="text-danger">Error loading products</h4>
+                            <p>Please try again later</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        // Simple cart functionality
+        function addToCart(productId) {
+            db.collection("products").doc(productId).get().then(doc => {
+                if (!doc.exists) {
+                    alert("Product not found.");
+                    return;
+                }
+
+                const product = doc.data();
+                const cart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+
+                const existing = cart.items.find(item => item.id === productId);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.items.push({
+                        id: productId,
+                        name: product.name,
+                        price: product.price,
+                        quantity: 1,
+                        imageUrl: product.imageUrl
+                    });
+                }
+
+                localStorage.setItem("cart", JSON.stringify(cart));
+                alert(`${product.name} added to cart!`);
+
+                // Update UI cart count
+                updateCartCount(cart.items);
+            }).catch(error => {
+                console.error("Error adding to cart:", error);
+                alert("Error adding to cart.");
+            });
+        }
+
+        function updateCartCount(items) {
+            const cartCount = document.getElementById('cartCount');
+            const total = items.reduce((sum, item) => sum + item.quantity, 0);
+            if (cartCount) cartCount.textContent = total;
+        }
+        
+        // Check auth state
+        auth.onAuthStateChanged(function(user) {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const accountBtn = document.getElementById('accountBtn');
+            const ordersBtn = document.getElementById('ordersBtn');
+            const cartbtn = document.getElementById('cartbtn');
+
+            
+            if (user) {
+                // User is logged in
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'block';
+                if (ordersBtn) ordersBtn.style.display = 'block';
+                if (cartbtn) cartbtn .style.display = 'block';
+                if (accountBtn) {
+                    accountBtn.style.display = 'block';
+                    document.getElementById('username').textContent = user.email.split('@')[0];
+                }
+            } else {
+                // User is logged out
+                if (loginBtn) loginBtn.style.display = 'block';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                if (ordersBtn) ordersBtn.style.display = 'none';
+                if (cartbtn) cartbtn.style.display = 'none';
+                if (accountBtn) accountBtn.style.display = 'none';
+            }
+        });
+        
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            auth.signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error("Logout error:", error);
+                alert('Error signing out: ' + error.message);
+            });
+        });
+        
+        // Search functionality
+        document.getElementById('searchButton').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm.trim() === '') return;
+            
+            // Here you would implement actual search functionality
+            alert('Searching for: ' + searchTerm);
+            // You would typically query Firestore with the search term
+        });
+        
+        // Load products when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            
+            // Initialize cart count
+            const cart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+            updateCartCount(cart.items);
+            
+            // Add event listener for add to cart buttons (delegated since buttons are dynamic)
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
+                    const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
+                    const productId = button.getAttribute('data-id');
+                    addToCart(productId);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
