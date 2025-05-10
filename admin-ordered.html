@@ -20,11 +20,13 @@
     }
 
     .container {
-      margin-top: 40px;
+      margin-top: 20px;
+      padding: 0 15px;
+      max-width: 40x;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: #333;
       font-weight: 700;
     }
@@ -33,26 +35,29 @@
       background: white;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
       transition: transform 0.3s ease-in-out;
+      overflow: hidden;
     }
 
     .order-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transform: scale(1.01);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     }
 
     .order-header {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+      gap: 10px;
     }
 
     .order-status {
-      font-size: 1rem;
-      padding: 6px 15px;
+      font-size: 0.9rem;
+      padding: 5px 12px;
       border-radius: 5px;
       font-weight: 600;
       color: white;
@@ -62,12 +67,13 @@
     .btn-change-status {
       background-color: var(--primary-color);
       border: none;
-      padding: 8px 20px;
+      padding: 8px 15px;
       font-size: 14px;
       color: white;
       cursor: pointer;
       border-radius: 5px;
       transition: background-color 0.3s;
+      white-space: nowrap;
     }
 
     .btn-change-status:hover {
@@ -77,12 +83,13 @@
     .btn-delete {
       background-color: var(--accent-color);
       border: none;
-      padding: 8px 20px;
+      padding: 8px 15px;
       font-size: 14px;
       color: white;
       cursor: pointer;
       border-radius: 5px;
       transition: background-color 0.3s;
+      white-space: nowrap;
     }
 
     .btn-delete:hover {
@@ -92,25 +99,30 @@
     .order-item {
       margin-bottom: 1rem;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
+      gap: 10px;
     }
 
     .order-item .item-info {
       display: flex;
       align-items: center;
+      flex: 1;
+      min-width: 200px;
     }
 
     .order-item img {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       object-fit: contain;
       border-radius: 5px;
-      margin-right: 1rem;
+      margin-right: 0.75rem;
     }
 
     .order-summary p {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #555;
+      margin-bottom: 0.5rem;
     }
 
     .order-summary strong {
@@ -119,22 +131,80 @@
     }
 
     .order-details .order-items {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     .btn-dashboard {
       background-color: var(--primary-color);
       color: white;
       border: none;
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 8px 15px;
+      font-size: 15px;
       border-radius: 5px;
       margin-bottom: 20px;
       transition: background-color 0.3s;
+      display: inline-block;
+      width: auto;
     }
 
     .btn-dashboard:hover {
       background-color: #218838;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .button-container button {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        margin-top: 15px;
+        padding: 0 10px;
+      }
+      
+      h1 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .order-card {
+        padding: 1rem;
+      }
+      
+      .order-header h4 {
+        font-size: 1.1rem;
+      }
+      
+      .order-details h5, .order-items h5 {
+        font-size: 1.1rem;
+      }
+      
+      .order-item img {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .btn-dashboard {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      
+      .button-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .button-container button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -182,6 +252,7 @@
         // Create the HTML structure for each order
         const orderCard = document.createElement('div');
         orderCard.classList.add('order-card');
+        orderCard.setAttribute('data-order-id', orderId);
 
         orderCard.innerHTML = `
           <div class="order-header">
@@ -219,7 +290,7 @@
             <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
           </div>
           
-          <div class="d-flex justify-content-between">
+          <div class="button-container">
             <button class="btn-change-status" onclick="changeOrderStatus('${orderId}')">Change Status</button>
             <button class="btn-delete" onclick="deleteOrder('${orderId}')">Delete Order</button>
           </div>
@@ -241,22 +312,34 @@
       // Change order status
       window.changeOrderStatus = async (orderId) => {
         const newStatus = prompt('Enter new status (Processing, Shipped, Delivered, Cancelled):');
-        if (['Processing', 'Shipped', 'Delivered', 'Cancelled'].includes(newStatus)) {
-          await db.collection('orders').doc(orderId).update({ status: newStatus });
-          document.querySelector(`[data-order-id="${orderId}"] .order-status`).textContent = newStatus;
-          alert('Order status updated successfully!');
-        } else {
-          alert('Invalid status');
+        if (newStatus && ['Processing', 'Shipped', 'Delivered', 'Cancelled'].includes(newStatus)) {
+          try {
+            await db.collection('orders').doc(orderId).update({ status: newStatus });
+            const statusElement = document.querySelector(`[data-order-id="${orderId}"] .order-status`);
+            statusElement.textContent = newStatus;
+            statusElement.className = `order-status ${getStatusClass(newStatus)}`;
+            alert('Order status updated successfully!');
+          } catch (error) {
+            alert('Error updating order status: ' + error.message);
+          }
+        } else if (newStatus !== null) {
+          alert('Invalid status. Please enter one of: Processing, Shipped, Delivered, Cancelled');
         }
       };
 
       // Delete order
       window.deleteOrder = async (orderId) => {
         if (confirm('Are you sure you want to delete this order?')) {
-          await db.collection('orders').doc(orderId).delete();
-          const orderCard = document.querySelector(`[data-order-id="${orderId}"]`);
-          orderCard.remove();
-          alert('Order deleted successfully!');
+          try {
+            await db.collection('orders').doc(orderId).delete();
+            const orderCard = document.querySelector(`[data-order-id="${orderId}"]`);
+            if (orderCard) {
+              orderCard.remove();
+              alert('Order deleted successfully!');
+            }
+          } catch (error) {
+            alert('Error deleting order: ' + error.message);
+          }
         }
       };
     });
