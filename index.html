@@ -466,7 +466,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Firebase and App Script -->
-    <script>
+     <script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDU6li87RVbo5uHsQkM5cVpiT16Cjp4GwY",
@@ -477,20 +477,20 @@
             appId: "1:101895361272:web:5599e4de733055b92e610d",
             measurementId: "G-YR2J7DEXRD"
         };
-
+    
         // Initialize Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-        
+    
         const auth = firebase.auth();
         const db = firebase.firestore();
-        
+    
         // Function to load products from Firestore
         function loadProducts() {
             const featuredContainer = document.getElementById('featuredProductsContainer');
             const offersContainer = document.getElementById('offersContainer');
-            
+    
             // Show loading state
             featuredContainer.innerHTML = `
                 <div class="col-12 text-center py-5">
@@ -501,13 +501,13 @@
                 </div>
             `;
             offersContainer.innerHTML = '';
-            
+    
             // Get products from Firestore
             db.collection("products").orderBy("createdAt", "desc").get()
                 .then((querySnapshot) => {
                     featuredContainer.innerHTML = '';
                     offersContainer.innerHTML = '';
-                    
+    
                     if (querySnapshot.empty) {
                         featuredContainer.innerHTML = `
                             <div class="col-12 text-center py-5">
@@ -517,11 +517,10 @@
                         `;
                         return;
                     }
-                    
+    
                     querySnapshot.forEach((doc, index) => {
                         const product = doc.data();
-                        
-                        // Create product card HTML
+    
                         const productCard = `
                             <div class="col-6 col-md-4 col-lg-3 mb-4">
                                 <div class="card product-card h-100">
@@ -540,8 +539,7 @@
                                 </div>
                             </div>
                         `;
-                        
-                        // Add to featured products (first 4) or offers (next 4)
+    
                         if (featuredContainer.children.length < 4) {
                             featuredContainer.innerHTML += productCard;
                         } else if (offersContainer.children.length < 4) {
@@ -559,18 +557,17 @@
                     `;
                 });
         }
-        
-        // Simple cart functionality
+    
         function addToCart(productId) {
             db.collection("products").doc(productId).get().then(doc => {
                 if (!doc.exists) {
                     alert("Product not found.");
                     return;
                 }
-
+    
                 const product = doc.data();
                 const cart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
-
+    
                 const existing = cart.items.find(item => item.id === productId);
                 if (existing) {
                     existing.quantity += 1;
@@ -583,45 +580,39 @@
                         imageUrl: product.imageUrl
                     });
                 }
-
+    
                 localStorage.setItem("cart", JSON.stringify(cart));
                 alert(`${product.name} added to cart!`);
-
-                // Update UI cart count
                 updateCartCount(cart.items);
             }).catch(error => {
                 console.error("Error adding to cart:", error);
                 alert("Error adding to cart.");
             });
         }
-
+    
         function updateCartCount(items) {
             const cartCount = document.getElementById('cartCount');
             const total = items.reduce((sum, item) => sum + item.quantity, 0);
             if (cartCount) cartCount.textContent = total;
         }
-        
-        // Check auth state
+    
         auth.onAuthStateChanged(function(user) {
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
             const accountBtn = document.getElementById('accountBtn');
             const ordersBtn = document.getElementById('ordersBtn');
             const cartbtn = document.getElementById('cartbtn');
-
-            
+    
             if (user) {
-                // User is logged in
                 if (loginBtn) loginBtn.style.display = 'none';
                 if (logoutBtn) logoutBtn.style.display = 'block';
                 if (ordersBtn) ordersBtn.style.display = 'block';
-                if (cartbtn) cartbtn .style.display = 'block';
+                if (cartbtn) cartbtn.style.display = 'block';
                 if (accountBtn) {
                     accountBtn.style.display = 'block';
                     document.getElementById('username').textContent = user.email.split('@')[0];
                 }
             } else {
-                // User is logged out
                 if (loginBtn) loginBtn.style.display = 'block';
                 if (logoutBtn) logoutBtn.style.display = 'none';
                 if (ordersBtn) ordersBtn.style.display = 'none';
@@ -629,8 +620,7 @@
                 if (accountBtn) accountBtn.style.display = 'none';
             }
         });
-        
-        // Logout handler
+    
         document.getElementById('logoutBtn').addEventListener('click', function() {
             auth.signOut().then(() => {
                 window.location.href = 'index.html';
@@ -639,32 +629,102 @@
                 alert('Error signing out: ' + error.message);
             });
         });
-        
-        // Search functionality
-        document.getElementById('searchButton').addEventListener('click', function() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            if (searchTerm.trim() === '') return;
-            
-            // Here you would implement actual search functionality
-            alert('Searching for: ' + searchTerm);
-            // You would typically query Firestore with the search term
-        });
-        
-        // Load products when page loads
+    
+        // 🔍 Live Search Filter Function
+        function filterProducts(term) {
+            const featuredCards = document.querySelectorAll('#featuredProductsContainer .product-card');
+            const offersCards = document.querySelectorAll('#offersContainer .product-card');
+            const allCards = [...featuredCards, ...offersCards];
+            let found = false;
+    
+            allCards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const desc = card.querySelector('.card-text').textContent.toLowerCase();
+                if (title.includes(term) || desc.includes(term)) {
+                    card.closest('.col-6').style.display = '';
+                    found = true;
+                } else {
+                    card.closest('.col-6').style.display = 'none';
+                }
+            });
+    
+            const emptyMessage = document.getElementById('noSearchMessage');
+            if (!found && term !== '') {
+                if (!emptyMessage) {
+                    const msg = document.createElement('div');
+                    msg.id = 'noSearchMessage';
+                    msg.className = 'col-12 text-center text-muted py-3';
+                    msg.textContent = `No results for "${term}"`;
+                    document.getElementById('featuredProductsContainer').appendChild(msg);
+                }
+            } else {
+                if (emptyMessage) emptyMessage.remove();
+            }
+        }
+    
+        // 📦 DOM Ready
         document.addEventListener('DOMContentLoaded', function() {
             loadProducts();
-            
-            // Initialize cart count
+    
             const cart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
             updateCartCount(cart.items);
-            
-            // Add event listener for add to cart buttons (delegated since buttons are dynamic)
+    
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
                     const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
                     const productId = button.getAttribute('data-id');
                     addToCart(productId);
                 }
+            });
+    
+            // Scroll navbar effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+    
+            // Smooth anchor scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+    
+            // Navbar mobile toggle
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            if (navbarToggler && navbarCollapse) {
+                navbarToggler.addEventListener('click', function() {
+                    navbarCollapse.classList.toggle('show');
+                });
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.addEventListener('click', function() {
+                        if (window.innerWidth < 992) {
+                            navbarCollapse.classList.remove('show');
+                        }
+                    });
+                });
+            }
+    
+            // 🔍 Event Listeners for Search
+            document.getElementById('searchInput').addEventListener('input', function () {
+                const term = this.value.toLowerCase().trim();
+                filterProducts(term);
+            });
+    
+            document.getElementById('searchButton').addEventListener('click', function () {
+                const term = document.getElementById('searchInput').value.toLowerCase().trim();
+                filterProducts(term);
             });
         });
     </script>
