@@ -77,8 +77,16 @@
             margin-right: 0;
         }
 
+        /* Hidden Products */
+        .hidden-product {
+            display: none;
+        }
 
-
+        /* View All Button */
+        .view-all-container {
+            text-align: center;
+            margin-top: 20px;
+        }
 
         /* Footer */
         footer a {
@@ -168,7 +176,7 @@
             height: 40px;
             overflow: hidden;
             display: -webkit-box;
-           
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }
         
@@ -195,12 +203,8 @@
         }
 
         .navbar-collapse {
-  transition: height 0.3s ease !important;
-}
-
-
-
-
+            transition: height 0.3s ease !important;
+        }
     </style>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -280,8 +284,6 @@
         </div>
     </nav>
     
-
-    
     <!-- Hero Section -->
     <section class="hero-section bg-light py-5">
         <div class="container">
@@ -358,6 +360,10 @@
                     </div>
                     <p class="mt-2">Loading products...</p>
                 </div>
+            </div>
+            <!-- View All Button Container -->
+            <div class="view-all-container" id="viewAllContainer" style="display: none;">
+                <button class="btn btn-success" id="viewAllBtn">View All Products</button>
             </div>
         </div>
     </section>
@@ -466,7 +472,6 @@
                     <p class="mb-0">&copy; 2025 FreshMart. All rights reserved.</p>
                     <p class="mb-0">Designed and Developed by Anto kochumon.</p>
                 </div>
-
             </div>
         </div>
     </footer>
@@ -475,7 +480,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Firebase and App Script -->
-     <script>
+    <script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDU6li87RVbo5uHsQkM5cVpiT16Cjp4GwY",
@@ -527,34 +532,29 @@
                         return;
                     }
     
-                    querySnapshot.forEach((doc, index) => {
-                        const product = doc.data();
-    
-                        const productCard = `
-                            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                                <div class="card product-card h-100">
-                                    ${index < 2 ? '<span class="sale-badge">SALE</span>' : ''}
-                                    <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.name}</h5>
-                                        <p class="card-text">${product.description.substring(0, 60)}...</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="price">$${product.price.toFixed(2)}</span>
-                                            <button class="btn btn-sm btn-outline-success add-to-cart" data-id="${doc.id}">
-                                                <i class="fas fa-cart-plus me-1"></i> Add
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-    
-                        if (featuredContainer.children.length < 4) {
-                            featuredContainer.innerHTML += productCard;
-                        } else if (offersContainer.children.length < 4) {
-                            offersContainer.innerHTML += productCard;
-                        }
+                    const products = [];
+                    querySnapshot.forEach((doc) => {
+                        products.push({ id: doc.id, ...doc.data() });
                     });
+    
+                    // Display first 8 products normally
+                    for (let i = 0; i < Math.min(8, products.length); i++) {
+                        const product = products[i];
+                        const productCard = createProductCard(product, i);
+                        featuredContainer.innerHTML += productCard;
+                    }
+    
+                    // If there are more than 8 products, hide the rest
+                    if (products.length > 8) {
+                        for (let i = 8; i < products.length; i++) {
+                            const product = products[i];
+                            const productCard = createProductCard(product, i);
+                            featuredContainer.innerHTML += `<div class="hidden-product">${productCard}</div>`;
+                        }
+                        
+                        // Show the View All button
+                        document.getElementById('viewAllContainer').style.display = 'block';
+                    }
                 })
                 .catch((error) => {
                     console.error("Error getting products: ", error);
@@ -566,19 +566,48 @@
                     `;
                 });
         }
-
+        
+        // Helper function to create product card HTML
+        function createProductCard(product, index) {
+            return `
+                <div class="col-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card product-card h-100">
+                        ${index < 2 ? '<span class="sale-badge">SALE</span>' : ''}
+                        <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description.substring(0, 60)}...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">$${product.price.toFixed(2)}</span>
+                                <button class="btn btn-sm btn-outline-success add-to-cart" data-id="${product.id}">
+                                    <i class="fas fa-cart-plus me-1"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Function to show all hidden products
+        function showAllProducts() {
+            const hiddenProducts = document.querySelectorAll('.hidden-product');
+            hiddenProducts.forEach(product => {
+                product.classList.remove('hidden-product');
+            });
+            
+            // Hide the View All button after clicking
+            document.getElementById('viewAllContainer').style.display = 'none';
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
-        const navbarCollapse = document.getElementById('navbarNav');
-        
-        // Prevent closing when clicking inside the navbar
-        navbarCollapse.addEventListener('click', function(e) {
-            e.stopPropagation();
+            const navbarCollapse = document.getElementById('navbarNav');
+            
+            // Prevent closing when clicking inside the navbar
+            navbarCollapse.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         });
-    });
-
-
-
     
         function addToCart(productId) {
             db.collection("products").doc(productId).get().then(doc => {
@@ -698,6 +727,9 @@
                     addToCart(productId);
                 }
             });
+    
+            // View All Button Event Listener
+            document.getElementById('viewAllBtn').addEventListener('click', showAllProducts);
     
             // Scroll navbar effect
             window.addEventListener('scroll', function() {
