@@ -1,497 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreshMart - Premium Online Grocery Shopping | Fresh Delivery</title>
-    <meta name="description" content="FreshMart - Your premium online grocery store. Fresh produce, fast delivery, and competitive prices. Shop fruits, vegetables, meat, dairy and more.">
-    
+    <title>FreshMart - Online Grocery Shopping</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- Custom CSS -->
     <style>
-        :root {
-            --primary: #28a745;
-            --primary-dark: #218838;
-            --secondary: #6c757d;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --border-radius: 12px;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            line-height: 1.6;
-            color: #333;
-        }
-
-        /* Enhanced Navbar */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
-            box-shadow: 0 2px 30px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-            transition: var(--transition);
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar-brand i {
-            font-size: 1.5rem;
-            margin-right: 0.5rem;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            padding: 0.5rem 1rem !important;
-            border-radius: 8px;
-            transition: var(--transition);
-            margin: 0 0.2rem;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-1px);
-        }
-
-        .dropdown-menu {
-            border: none;
-            box-shadow: var(--shadow);
-            border-radius: var(--border-radius);
-            padding: 0.5rem;
-        }
-
-        .dropdown-item {
-            border-radius: 6px;
-            padding: 0.6rem 1rem;
-            margin: 0.1rem 0;
-            transition: var(--transition);
-        }
-
-        .dropdown-item:hover {
-            background: var(--light);
-            color: var(--primary);
-        }
-
-        /* Enhanced Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.95) 0%, rgba(33, 136, 56, 0.95) 100%), 
-                        url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
-            padding: 120px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="white" opacity="0.05"/></svg>');
-            background-size: cover;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-section h1 {
-            font-weight: 700;
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .hero-section .lead {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .btn-hero {
-            background: white;
-            color: var(--primary);
-            border: none;
-            padding: 1rem 2.5rem;
-            font-weight: 600;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            transition: var(--transition);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn-hero:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            color: var(--primary-dark);
-        }
-
-        /* Enhanced Product Cards */
+        /* Product Cards */
         .product-card {
-            border: none;
-            border-radius: var(--border-radius);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
             overflow: hidden;
-            transition: var(--transition);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            height: 100%;
+            border: none;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .product-card .card-img-top {
-            height: 220px;
+            transition: transform 0.3s ease;
+            height: 200px;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
         .product-card:hover .card-img-top {
-            transform: scale(1.08);
-        }
-
-        .product-card .card-body {
-            padding: 1.5rem;
-        }
-
-        .product-card .card-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-
-        .product-card .card-text {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-
-        .price {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--primary);
-        }
-
-        .add-to-cart {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .add-to-cart:hover {
-            background: var(--primary-dark);
             transform: scale(1.05);
         }
 
-        .sale-badge {
-            background: linear-gradient(45deg, #dc3545, #e35d6a);
-            color: white;
-            padding: 0.4rem 0.8rem;
+        .add-to-cart {
+            transition: all 0.3s ease;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+            padding: 5px 15px;
         }
 
-        /* Enhanced Categories */
-        .category-card {
-            border: none;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            transition: var(--transition);
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        .add-to-cart:hover {
+            background-color: #198754;
+            color: white;
         }
 
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
         }
 
-        .category-card img {
-            height: 180px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .category-card:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Enhanced Why Choose Us */
+        /* Why Choose Us Icons */
         .icon-box {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border-radius: 50%;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1.5rem;
-            transition: var(--transition);
+            font-size: 24px;
         }
 
-        .feature-card:hover .icon-box {
-            transform: rotateY(180deg);
+        /* Navbar */
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Enhanced Footer */
-        footer {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        /* Added space between navbar buttons */
+        .navbar-nav .nav-item {
+            margin-right: 10px;
         }
 
-        footer h5 {
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            position: relative;
+        .navbar-nav .nav-item:last-child {
+            margin-right: 0;
         }
 
-        footer h5::after {
-            content: '';
-            position: absolute;
-            bottom: -0.5rem;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 2px;
+        /* Hidden Products */
+        .hidden-product {
+            display: none;
         }
 
+        /* View All Button */
+        .view-all-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Footer */
         footer a {
-            transition: var(--transition);
-            display: inline-block;
+            text-decoration: none;
+            color: #adb5bd;
         }
 
         footer a:hover {
-            color: var(--primary) !important;
-            transform: translateX(5px);
+            color: white;
         }
 
-        .social-icons a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.5rem;
-            transition: var(--transition);
-        }
-
-        .social-icons a:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* Loading Animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        /* Responsive Improvements */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .hero-section {
-                padding: 80px 0;
+                padding: 60px 0;
                 text-align: center;
             }
-            
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-section .lead {
-                font-size: 1.1rem;
-            }
-            
-            .navbar-brand {
-                font-size: 1.5rem;
-            }
-            
-            .product-card .card-img-top {
-                height: 180px;
-            }
-        }
 
-        @media (max-width: 576px) {
-            .hero-section {
-                padding: 60px 0;
+            .hero-section .display-4 {
+                font-size: 2.2rem;
             }
-            
-            .hero-section h1 {
-                font-size: 2rem;
-            }
-            
-            .btn-hero {
-                padding: 0.8rem 2rem;
-                font-size: 1rem;
-            }
-            
-            .category-card img {
+
+            .product-card .card-img-top {
                 height: 150px;
             }
+
+            .navbar-nav {
+                margin-top: 15px;
+            }
+
+            .search-container {
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+
+            .product-card {
+                margin-bottom: 20px;
+            }
+
+            /* Adjust spacing for mobile */
+            .navbar-nav .nav-item {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
         }
 
-        /* Search Enhancement */
-        .search-container {
-            position: relative;
+        @media (max-width:576px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+
+            .hero-section .display-4 {
+                font-size: 1.8rem;
+            }
+
+            .category-card img {
+                height: 120px;
+            }
+
+            .btn-lg {
+                padding: 8px 16px;
+                font-size: 1rem;
+            }
         }
 
-        .search-input {
-            border-radius: 25px;
-            padding: 0.6rem 1.5rem;
-            border: 2px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
+        /* Modern product card styling */
+        .product-card {
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+        }
+
+        .product-card .card-body {
+            padding: 15px;
+        }
+
+        .product-card .card-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-card .card-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-card .price {
+            font-weight: 600;
+            color: #198754;
+        }
+
+        .sale-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
             color: white;
-            transition: var(--transition);
-        }
-
-        .search-input:focus {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.4);
-            box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .search-input::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .search-btn {
-            border-radius: 25px;
-            padding: 0.6rem 1.2rem;
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            transition: var(--transition);
-        }
-
-        .search-btn:hover {
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Section Spacing */
-        section {
-            padding: 80px 0;
-        }
-
-        section.bg-light {
-            background-color: #f8fafc !important;
-        }
-
-        /* Badge Styles */
-        .badge {
-            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
             font-weight: 600;
         }
+
+        /* Orders button for logged in users */
+        .orders-btn {
+            margin-right: 10px;
+        }
+
+        .navbar-collapse {
+            transition: height 0.3s ease !important;
+        }
     </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 </head>
+
 <body>
-    <!-- Enhanced Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">
-                <i class="fas fa-shopping-basket"></i>FreshMart
+                <i class="fas fa-shopping-basket me-2"></i>FreshMart
             </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.html">Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
-                           data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Departments
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-apple-alt me-2"></i>Fruits & Vegetables</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-drumstick-bite me-2"></i>Meat & Fish</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-egg me-2"></i>Dairy & Eggs</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-bread-slice me-2"></i>Bakery</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-snowflake me-2"></i>Frozen</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-wine-bottle me-2"></i>Drinks</a></li>
+                            <li><a class="dropdown-item" href="#">Fruits & Vegetables</a></li>
+                            <li><a class="dropdown-item" href="#">Meat & Fish</a></li>
+                            <li><a class="dropdown-item" href="#">Dairy & Eggs</a></li>
+                            <li><a class="dropdown-item" href="#">Bakery</a></li>
+                            <li><a class="dropdown-item" href="#">Frozen</a></li>
+                            <li><a class="dropdown-item" href="#">Drinks</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-tag me-1"></i>Offers</a>
+                        <a class="nav-link" href="#">Offers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-utensils me-1"></i>Recipes</a>
+                        <a class="nav-link" href="#">Recipes</a>
                     </li>
                 </ul>
 
-                <div class="d-lg-flex align-items-center gap-3">
-                    <!-- Enhanced Search -->
-                    <div class="input-group search-container me-lg-3">
-                        <input type="text" class="form-control search-input" placeholder="Search products..." id="searchInput">
-                        <button class="btn search-btn" type="button" id="searchButton">
+                <div
+                    class="d-lg-flex flex-lg-row flex-column align-items-lg-center align-items-stretch w-100 gap-2 mt-3 mt-lg-0">
+                    <!-- Search -->
+                    <div class="input-group search-container">
+                        <input type="text" class="form-control search-input" placeholder="Search products..."
+                            id="searchInput">
+                        <button class="btn btn-light search-btn" type="button" id="searchButton">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
 
                     <!-- Auth Buttons -->
-                    <div id="authButtons" class="d-flex gap-2">
-                        <a href="login.html" class="btn btn-outline-light" id="loginBtn">
-                            <i class="fas fa-sign-in-alt me-1"></i>Login
-                        </a>
-                        <button class="btn btn-outline-light" id="logoutBtn" style="display:none;">
-                            <i class="fas fa-sign-out-alt me-1"></i>Logout
-                        </button>
+                    <div id="authButtons" class="d-flex flex-column flex-lg-row gap-2">
+                        <a href="login.html" class="btn btn-outline-light" id="loginBtn">Login</a>
+                        <button class="btn btn-outline-light" id="logoutBtn" style="display:none;">Logout</button>
                     </div>
 
                     <!-- Cart -->
                     <a href="cart.html" id="cartbtn" class="btn btn-outline-light position-relative">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="cartCount">
                             0
                         </span>
                     </a>
@@ -503,87 +284,73 @@
 
                     <!-- Account -->
                     <span id="accountBtn" style="display:none;" class="btn btn-outline-light text-nowrap">
-                        <i class="fas fa-user me-1"></i>Hello, <span id="username"></span>
+                        Hello, <span id="username"></span>
                     </span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Enhanced Hero Section -->
-    <section class="hero-section">
+    <!-- Hero Section -->
+    <section class="hero-section bg-light py-5">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6 hero-content">
-                    <h1 class="display-3 fw-bold mb-4">Fresh Groceries Delivered to Your Door</h1>
-                    <p class="lead mb-4">Experience the convenience of premium grocery shopping. We deliver farm-fresh produce, quality meats, and pantry essentials straight to your home.</p>
-                    <div class="d-flex flex-wrap gap-3">
-                        <a href="#featured-products" class="btn btn-hero">Shop Now</a>
-                        <a href="#" class="btn btn-outline-light btn-lg">Learn More</a>
-                    </div>
-                    <div class="mt-4 d-flex flex-wrap gap-4">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-shipping-fast me-2"></i>
-                            <span>Free Delivery Over $50</span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-award me-2"></i>
-                            <span>Quality Guaranteed</span>
-                        </div>
-                    </div>
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold mb-4">Fresh Groceries Delivered to Your Door</h1>
+                    <p class="lead mb-4">Shop the freshest produce, meats, and pantry staples with convenient home
+                        delivery.</p>
+                    <a href="#featured-products" class="btn btn-success btn-lg">Shop Now</a>
                 </div>
-                <div class="col-lg-6 text-center">
-                    <!-- Hero image is in background -->
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                        alt="Fresh groceries" class="img-fluid rounded shadow">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Categories Section -->
-    <section class="categories-section">
+    <section class="categories-section py-5">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Shop by Category</h2>
-                <p class="lead text-muted">Explore our wide range of fresh products</p>
-            </div>
+            <h2 class="text-center mb-5">Shop by Category</h2>
             <div class="row g-4">
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card category-card h-100 border-0">
-                        <img src="https://images.unsplash.com/photo-1444459094717-a39f1e3e0903?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                             class="card-img-top" alt="Fruits & Vegetables">
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1444459094717-a39f1e3e0903?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                            class="card-img-top" alt="Fruits & Vegetables">
                         <div class="card-body text-center">
                             <h5 class="card-title">Fruits & Vegetables</h5>
-                            <a href="#" class="btn btn-sm btn-success">Shop Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card category-card h-100 border-0">
-                        <img src="https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                             class="card-img-top" alt="Meat & Fish">
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                            class="card-img-top" alt="Meat & Fish">
                         <div class="card-body text-center">
                             <h5 class="card-title">Meat & Fish</h5>
-                            <a href="#" class="btn btn-sm btn-success">Shop Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card category-card h-100 border-0">
-                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                             class="card-img-top" alt="Dairy & Eggs">
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                            class="card-img-top" alt="Dairy & Eggs">
                         <div class="card-body text-center">
                             <h5 class="card-title">Dairy & Eggs</h5>
-                            <a href="#" class="btn btn-sm btn-success">Shop Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card category-card h-100 border-0">
-                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                             class="card-img-top" alt="Bakery">
+                <div class="col-6 col-md-3">
+                    <div class="card category-card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                            class="card-img-top" alt="Bakery">
                         <div class="card-body text-center">
                             <h5 class="card-title">Bakery</h5>
-                            <a href="#" class="btn btn-sm btn-success">Shop Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-success">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -592,11 +359,11 @@
     </section>
 
     <!-- Featured Products -->
-    <section id="featured-products" class="featured-products bg-light">
+    <section id="featured-products" class="featured-products py-5 bg-light">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
-                <p class="lead text-muted">Discover our most popular items</p>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Featured Products</h2>
+                <a href="#" class="btn btn-outline-success">View All</a>
             </div>
             <div class="row g-4" id="featuredProductsContainer">
                 <!-- Products will be loaded here via JavaScript -->
@@ -607,52 +374,62 @@
                     <p class="mt-2">Loading products...</p>
                 </div>
             </div>
-            <div class="text-center mt-5" id="viewAllContainer" style="display: none;">
-                <button class="btn btn-success btn-lg" id="viewAllBtn">
-                    <i class="fas fa-eye me-2"></i>View All Products
-                </button>
+            <!-- View All Button Container -->
+            <div class="view-all-container" id="viewAllContainer" style="display: none;">
+                <button class="btn btn-success" id="viewAllBtn">View All Products</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weekly Offers -->
+    <section class="weekly-offers py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Weekly Offers</h2>
+                <a href="#" class="btn btn-outline-success">View All</a>
+            </div>
+            <div class="row g-4" id="offersContainer">
+                <!-- Offers will be loaded here via JavaScript -->
             </div>
         </div>
     </section>
 
     <!-- Why Choose Us -->
-    <section class="why-choose-us">
+    <section class="why-choose-us py-5 bg-light">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Why Choose FreshMart?</h2>
-                <p class="lead text-muted">We're committed to providing the best grocery shopping experience</p>
-            </div>
+            <h2 class="text-center mb-5">Why Choose FreshMart?</h2>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card border-0 bg-transparent text-center feature-card h-100">
+                    <div class="card border-0 bg-transparent text-center">
                         <div class="card-body">
-                            <div class="icon-box">
+                            <div class="icon-box bg-success text-white rounded-circle mx-auto mb-3">
                                 <i class="fas fa-truck"></i>
                             </div>
-                            <h4 class="card-title fw-bold">Fast Delivery</h4>
-                            <p class="card-text">Get your groceries delivered to your doorstep in as little as 1 hour with our express delivery service.</p>
+                            <h5 class="card-title">Fast Delivery</h5>
+                            <p class="card-text">Get your groceries delivered to your doorstep in as little as 1 hour.
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 bg-transparent text-center feature-card h-100">
+                    <div class="card border-0 bg-transparent text-center">
                         <div class="card-body">
-                            <div class="icon-box">
+                            <div class="icon-box bg-success text-white rounded-circle mx-auto mb-3">
                                 <i class="fas fa-leaf"></i>
                             </div>
-                            <h4 class="card-title fw-bold">Fresh Quality</h4>
-                            <p class="card-text">We work directly with local farms to bring you the freshest, highest quality products available.</p>
+                            <h5 class="card-title">Fresh Quality</h5>
+                            <p class="card-text">We source only the freshest and highest quality products for you.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 bg-transparent text-center feature-card h-100">
+                    <div class="card border-0 bg-transparent text-center">
                         <div class="card-body">
-                            <div class="icon-box">
+                            <div class="icon-box bg-success text-white rounded-circle mx-auto mb-3">
                                 <i class="fas fa-pound-sign"></i>
                             </div>
-                            <h4 class="card-title fw-bold">Best Prices</h4>
-                            <p class="card-text">Enjoy competitive prices with weekly offers, member discounts, and special promotions.</p>
+                            <h5 class="card-title">Best Prices</h5>
+                            <p class="card-text">Competitive prices with weekly offers and discounts.</p>
                         </div>
                     </div>
                 </div>
@@ -660,73 +437,54 @@
         </div>
     </section>
 
-    <!-- Enhanced Footer -->
+    <!-- Footer -->
     <footer class="bg-dark text-white py-5">
         <div class="container">
             <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <h5 class="mb-4">
-                        <i class="fas fa-shopping-basket me-2"></i>FreshMart
-                    </h5>
-                    <p class="mb-4">Your trusted partner for fresh, quality groceries delivered conveniently to your home. We're committed to excellence in every order.</p>
+                <div class="col-md-3">
+                    <h5 class="mb-4">FreshMart</h5>
+                    <p>Your one-stop shop for fresh groceries delivered to your door.</p>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-6">
+                <div class="col-md-3">
                     <h5 class="mb-4">Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#">Home</a></li>
-                        <li class="mb-2"><a href="#">Shop</a></li>
-                        <li class="mb-2"><a href="#">Offers</a></li>
-                        <li class="mb-2"><a href="#">Recipes</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Shop</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Offers</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Recipes</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-md-3">
                     <h5 class="mb-4">Customer Service</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#">My Account</a></li>
-                        <li class="mb-2"><a href="#">Order Tracking</a></li>
-                        <li class="mb-2"><a href="#">FAQs</a></li>
-                        <li class="mb-2"><a href="#">Returns Policy</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">My Account</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Order Tracking</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">FAQs</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Returns Policy</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="mb-4">Contact Info</h5>
+                <div class="col-md-3">
+                    <h5 class="mb-4">Contact Us</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <i class="fas fa-map-marker-alt me-2"></i>
-                            <span>Flat 3 2 Atholl Court Perth</span>
-                        </li>
-                        <li class="mb-3">
-                            <i class="fas fa-phone me-2"></i>
-                            <span>+44 7407266345</span>
-                        </li>
-                        <li class="mb-3">
-                            <i class="fas fa-envelope me-2"></i>
-                            <span>antokochumon2@gmail.com</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-clock me-2"></i>
-                            <span>Mon-Sun: 7:00 AM - 11:00 PM</span>
-                        </li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Flat 3 2 Atholl Court Perth</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +44 7407266345</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> antokochumon2@gmail.com</li>
                     </ul>
                 </div>
             </div>
             <hr class="my-4">
-            <div class="row align-items-center">
+            <div class="row">
                 <div class="col-md-6">
                     <p class="mb-0">&copy; 2025 FreshMart. All rights reserved.</p>
-                    <p class="mb-0">Designed and Developed by Anto Kochumon</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <img src="https://via.placeholder.com/200x50/ffffff/000000?text=Payment+Methods" 
-                         alt="Payment Methods" class="img-fluid" style="max-height: 30px;">
+                    <p class="mb-0">Designed and Developed by Anto kochumon.</p>
                 </div>
             </div>
         </div>
@@ -734,34 +492,34 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Firebase and App Script -->
     <script>
-        // Your existing Firebase and JavaScript code remains exactly the same
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyDU6li87RVbo5uHsQkM5cVpiT16Cjp4GwY",
-            authDomain: "anto-343cf.firebaseapp.com",
-            projectId: "anto-343cf",
-            storageBucket: "anto-343cf.firebasestorage.app",
-            messagingSenderId: "101895361272",
-            appId: "1:101895361272:web:5599e4de733055b92e610d",
-            measurementId: "G-YR2J7DEXRD"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
         };
-    
+
+
         // Initialize Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-    
+
         const auth = firebase.auth();
         const db = firebase.firestore();
-    
+
         // Function to load products from Firestore
         function loadProducts() {
             const featuredContainer = document.getElementById('featuredProductsContainer');
             const offersContainer = document.getElementById('offersContainer');
-    
+
             // Show loading state
             featuredContainer.innerHTML = `
                 <div class="col-12 text-center py-5">
@@ -772,13 +530,13 @@
                 </div>
             `;
             offersContainer.innerHTML = '';
-    
+
             // Get products from Firestore
             db.collection("products").orderBy("createdAt", "desc").get()
                 .then((querySnapshot) => {
                     featuredContainer.innerHTML = '';
                     offersContainer.innerHTML = '';
-    
+
                     if (querySnapshot.empty) {
                         featuredContainer.innerHTML = `
                             <div class="col-12 text-center py-5">
@@ -788,19 +546,19 @@
                         `;
                         return;
                     }
-    
+
                     const products = [];
                     querySnapshot.forEach((doc) => {
                         products.push({ id: doc.id, ...doc.data() });
                     });
-    
+
                     // Display first 8 products normally
                     for (let i = 0; i < Math.min(8, products.length); i++) {
                         const product = products[i];
                         const productCard = createProductCard(product, i);
                         featuredContainer.innerHTML += productCard;
                     }
-    
+
                     // If there are more than 8 products, hide the rest
                     if (products.length > 8) {
                         for (let i = 8; i < products.length; i++) {
@@ -808,7 +566,7 @@
                             const productCard = createProductCard(product, i);
                             featuredContainer.innerHTML += `<div class="hidden-product">${productCard}</div>`;
                         }
-                        
+
                         // Show the View All button
                         document.getElementById('viewAllContainer').style.display = 'block';
                     }
@@ -823,11 +581,11 @@
                     `;
                 });
         }
-        
+
         // Helper function to create product card HTML
         function createProductCard(product, index) {
             return `
-                <div class="col-6 col-md-4 col-lg-3 mb-4 fade-in-up">
+                <div class="col-6 col-md-4 col-lg-3 mb-4">
                     <div class="card product-card h-100">
                         ${index < 2 ? '<span class="sale-badge">SALE</span>' : ''}
                         <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
@@ -836,7 +594,7 @@
                             <p class="card-text">${product.description.substring(0, 60)}...</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="price">$${product.price.toFixed(2)}</span>
-                                <button class="btn btn-sm add-to-cart" data-id="${product.id}">
+                                <button class="btn btn-sm btn-outline-success add-to-cart" data-id="${product.id}">
                                     <i class="fas fa-cart-plus me-1"></i> Add
                                 </button>
                             </div>
@@ -845,37 +603,37 @@
                 </div>
             `;
         }
-        
+
         // Function to show all hidden products
         function showAllProducts() {
             const hiddenProducts = document.querySelectorAll('.hidden-product');
             hiddenProducts.forEach(product => {
                 product.classList.remove('hidden-product');
             });
-            
+
             // Hide the View All button after clicking
             document.getElementById('viewAllContainer').style.display = 'none';
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const navbarCollapse = document.getElementById('navbarNav');
-            
+
             // Prevent closing when clicking inside the navbar
-            navbarCollapse.addEventListener('click', function(e) {
+            navbarCollapse.addEventListener('click', function (e) {
                 e.stopPropagation();
             });
         });
-    
+
         function addToCart(productId) {
             db.collection("products").doc(productId).get().then(doc => {
                 if (!doc.exists) {
                     alert("Product not found.");
                     return;
                 }
-    
+
                 const product = doc.data();
                 const cart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
-    
+
                 const existing = cart.items.find(item => item.id === productId);
                 if (existing) {
                     existing.quantity += 1;
@@ -888,7 +646,7 @@
                         imageUrl: product.imageUrl
                     });
                 }
-    
+
                 localStorage.setItem("cart", JSON.stringify(cart));
                 alert(`${product.name} added to cart!`);
                 updateCartCount(cart.items);
@@ -897,20 +655,20 @@
                 alert("Error adding to cart.");
             });
         }
-    
+
         function updateCartCount(items) {
             const cartCount = document.getElementById('cartCount');
             const total = items.reduce((sum, item) => sum + item.quantity, 0);
             if (cartCount) cartCount.textContent = total;
         }
-    
-        auth.onAuthStateChanged(function(user) {
+
+        auth.onAuthStateChanged(function (user) {
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
             const accountBtn = document.getElementById('accountBtn');
             const ordersBtn = document.getElementById('ordersBtn');
             const cartbtn = document.getElementById('cartbtn');
-    
+
             if (user) {
                 if (loginBtn) loginBtn.style.display = 'none';
                 if (logoutBtn) logoutBtn.style.display = 'block';
@@ -928,8 +686,8 @@
                 if (accountBtn) accountBtn.style.display = 'none';
             }
         });
-    
-        document.getElementById('logoutBtn').addEventListener('click', function() {
+
+        document.getElementById('logoutBtn').addEventListener('click', function () {
             auth.signOut().then(() => {
                 window.location.href = 'index.html';
             }).catch((error) => {
@@ -937,14 +695,14 @@
                 alert('Error signing out: ' + error.message);
             });
         });
-    
+
         // 🔍 Live Search Filter Function
         function filterProducts(term) {
             const featuredCards = document.querySelectorAll('#featuredProductsContainer .product-card');
             const offersCards = document.querySelectorAll('#offersContainer .product-card');
             const allCards = [...featuredCards, ...offersCards];
             let found = false;
-    
+
             allCards.forEach(card => {
                 const title = card.querySelector('.card-title').textContent.toLowerCase();
                 const desc = card.querySelector('.card-text').textContent.toLowerCase();
@@ -955,7 +713,7 @@
                     card.closest('.col-6').style.display = 'none';
                 }
             });
-    
+
             const emptyMessage = document.getElementById('noSearchMessage');
             if (!found && term !== '') {
                 if (!emptyMessage) {
@@ -969,27 +727,27 @@
                 if (emptyMessage) emptyMessage.remove();
             }
         }
-    
+
         // 📦 DOM Ready
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadProducts();
-    
+
             const cart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
             updateCartCount(cart.items);
-    
-            document.addEventListener('click', function(e) {
+
+            document.addEventListener('click', function (e) {
                 if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
                     const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
                     const productId = button.getAttribute('data-id');
                     addToCart(productId);
                 }
             });
-    
+
             // View All Button Event Listener
             document.getElementById('viewAllBtn').addEventListener('click', showAllProducts);
-    
+
             // Scroll navbar effect
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 const navbar = document.querySelector('.navbar');
                 if (window.scrollY > 50) {
                     navbar.classList.add('scrolled');
@@ -997,7 +755,7 @@
                     navbar.classList.remove('scrolled');
                 }
             });
-    
+
             // Smooth anchor scroll
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -1010,29 +768,29 @@
                     }
                 });
             });
-    
+
             // Navbar mobile toggle
             const navbarToggler = document.querySelector('.navbar-toggler');
             const navbarCollapse = document.querySelector('.navbar-collapse');
             if (navbarToggler && navbarCollapse) {
-                navbarToggler.addEventListener('click', function() {
+                navbarToggler.addEventListener('click', function () {
                     navbarCollapse.classList.toggle('show');
                 });
                 document.querySelectorAll('.nav-link').forEach(navLink => {
-                    navLink.addEventListener('click', function() {
+                    navLink.addEventListener('click', function () {
                         if (window.innerWidth < 992) {
                             navbarCollapse.classList.remove('show');
                         }
                     });
                 });
             }
-    
+
             // 🔍 Event Listeners for Search
             document.getElementById('searchInput').addEventListener('input', function () {
                 const term = this.value.toLowerCase().trim();
                 filterProducts(term);
             });
-    
+
             document.getElementById('searchButton').addEventListener('click', function () {
                 const term = document.getElementById('searchInput').value.toLowerCase().trim();
                 filterProducts(term);
@@ -1040,5 +798,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>
