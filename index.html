@@ -459,21 +459,39 @@
         }
 
         /* Cart Badge */
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--accent-color);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
+/* Cart button */
+#cartbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 6px 12px;
+}
+
+/* Your badge style */
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--accent-color);
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Fix alignment inside navbar */
+.navbar .container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
         /* NEW: Floating Action Button for Mobile */
         .mobile-fab {
@@ -1656,6 +1674,7 @@
     </script>
 </body>
 </html>
+
 
 
 
